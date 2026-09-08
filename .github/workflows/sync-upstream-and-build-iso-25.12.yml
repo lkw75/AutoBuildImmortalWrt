@@ -60,6 +60,7 @@ jobs:
       - name: Checkout fork
         uses: actions/checkout@v6
         with:
+          ref: master
           fetch-depth: 0
 
       - name: Sync complete upstream master
@@ -93,7 +94,7 @@ jobs:
         run: |
           set -euo pipefail
           marker="# ======== x86_64 side-router package profile ========"
-          if ! grep -Fq "$marker" shell/apk-custom-packages.sh; then
+          if ! grep -Fq "luci-app-adguardhome" shell/apk-custom-packages.sh; then
             cat >> shell/apk-custom-packages.sh <<'EOF'
 
 # ======== x86_64 side-router package profile ========
