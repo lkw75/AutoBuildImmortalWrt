@@ -3,11 +3,8 @@
 # Log file for debugging
 LOGFILE="/etc/config/uci-defaults-log.txt"
 echo "Starting 99-custom.sh at $(date)" >>$LOGFILE
-# 设置默认防火墙规则，方便单网口虚拟机首次访问 WebUI 
-# 因为本项目中 单网口模式是dhcp模式 直接就能上网并且访问web界面 避免新手每次都要修改/etc/config/network中的静态ip
-# 当你刷机运行后 都调整好了 你完全可以在web页面自行关闭 wan口防火墙的入站数据
-# 具体操作方法：网络——防火墙 在wan的入站数据 下拉选项里选择 拒绝 保存并应用即可。
-uci set firewall.@zone[1].input='ACCEPT'
+# 旁路由虚拟机保持 WAN 入站拒绝；首次管理请从 LAN 侧访问。
+uci set firewall.@zone[1].input='REJECT'
 
 # 设置主机名映射，解决安卓原生 TV 无法联网的问题
 uci add dhcp domain
@@ -176,11 +173,9 @@ else
     echo "未检测到 Docker，跳过防火墙配置。"
 fi
 
-# 设置所有网口可访问网页终端
-uci delete ttyd.@ttyd[0].interface
-
-# 设置所有网口可连接 SSH
-uci set dropbear.@dropbear[0].Interface=''
+# 管理服务仅绑定 LAN，避免从 WAN 暴露网页终端或 SSH。
+uci set ttyd.@ttyd[0].interface='lan'
+uci set dropbear.@dropbear[0].Interface='lan'
 uci commit
 
 # 设置编译作者信息
