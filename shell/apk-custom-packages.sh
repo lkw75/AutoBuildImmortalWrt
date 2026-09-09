@@ -3,6 +3,17 @@
 # ============= 若启用 则打开注释 ========================
 # ============= 但此文件也可以处理仓库内的软件去留 本质上是做了一个PACKAGES字符串的拼接 ================
 
+# ======== x86_64 virtual side-router packages ========
+# OpenClash（build25.sh 会按上游逻辑下载所需内核与 Geo 数据）
+CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-openclash luci-compat kmod-tun kmod-inet-diag kmod-nft-tproxy bash curl ip-full unzip"
+
+# AdGuard Home 及 LuCI 管理界面
+CUSTOM_PACKAGES="$CUSTOM_PACKAGES adguardhome luci-app-adguardhome"
+
+# MT7921 PCIe 直通后的 AP 支持
+CUSTOM_PACKAGES="$CUSTOM_PACKAGES kmod-mt7921-common kmod-mt7921-firmware kmod-mt7921e -wpad-basic-mbedtls wpad-openssl wireless-regdb iw iwinfo"
+# ======== end x86_64 virtual side-router packages ========
+
 # 各位注意 如果你构建的固件是硬路由 此文件的注释要酌情考虑是否打开 因为硬路由的闪存空间有限 若构建出来过大或者构建失败 记得调整本文件的注释
 # 首页和网络向导(注意此插件依赖于istore商店 若集成它 则连同集成了istore商店)
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-i18n-quickstart-zh-cn"
